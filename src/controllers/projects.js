@@ -9,6 +9,7 @@ const cloudinary = require('./cloudinary')
 const https = require('https');
 const nodemailer = require('nodemailer');
 const xlsx = require('xlsx'); 
+const { count } = require('console');
 
 
 const transporter = nodemailer.createTransport({
@@ -49,11 +50,38 @@ const upload1 = multer({ storage: storage1 });
 const storage = multer.memoryStorage(); 
 const upload = multer({ storage: storage });
 
-router.get('/projects', async (req, res) => {
-  const getAllQ = `SELECT * FROM projects`;
+router.get('/projects/stats', async (req, res) => {
+  const getAllQ = `SELECT count(*) FROM projects where status=$1`;
+  const getAllT = `SELECT count(*) FROM projects where title=$1`;
+
+  const getAll = `SELECT count(*) FROM projects`;
     try {
-      const { rows } = await db.query(getAllQ);
-      return res.status(201).send(rows);
+
+      const { rows: completed } = await db.query(getAllQ, ['Completed']);
+      const { rows: ongoing } = await db.query(getAllQ, ['Ongoing']);
+      const { rows: abandoned } = await db.query(getAllQ, ['Abandoned']);
+      const { rows: smbh } = await db.query(getAllT, ['SMBH']);
+      const { rows: hpbh } = await db.query(getAllT, ['HPBH']);
+      const { rows: vip } = await db.query(getAllT, ['VIP']);
+      const { rows: flbh } = await db.query(getAllT, ['FLBH']);
+
+      const { rows: all } = await db.query(getAll);
+
+
+      return res.status(201).send({status: true, stat: [
+        {status: 'ALL', count: all[0].count },
+        {status: 'Completed', count: completed[0].count },
+        {status: 'Ongoing', count: ongoing[0].count },
+        {status: 'Abandoned', count: abandoned[0].count }
+      ],
+      projects: [
+        {title: 'Handpump Borehole', count: hpbh[0].count},
+        {title: 'Solar Motorize Borehole', count: smbh[0].count},
+        {title: 'Force Lift Borehole', count: flbh[0].count},
+        {title: 'VIP laterines', count: vip[0].count},
+
+      ]
+    });
     } catch (error) {
       if (error.routine === '_bt_check_unique') {
         return res.status(400).send({ message: 'No hero content' });
@@ -61,6 +89,18 @@ router.get('/projects', async (req, res) => {
       return res.status(400).send(`${error} jsh`);
     }
 });
+router.get('/projects', async (req, res) => {
+    const getAllQ = `SELECT * FROM projects`;
+      try {
+        const { rows } = await db.query(getAllQ);
+        return res.status(201).send(rows);
+      } catch (error) {
+        if (error.routine === '_bt_check_unique') {
+          return res.status(400).send({ message: 'No hero content' });
+        }
+        return res.status(400).send(`${error} jsh`);
+      }
+  });
 router.get('/projects/:id', async (req, res) => {
     const getAllQ = `SELECT * FROM projects where id=$1`;
       try {
