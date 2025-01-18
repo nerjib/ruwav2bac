@@ -1,0 +1,35 @@
+CREATE TABLE projects (
+    id SERIAL PRIMARY KEY,
+    title TEXT NOT NULL,
+    state TEXT,
+    lga TEXT,
+    ward TEXT,
+    community TEXT,
+    contractor TEXT,
+    lot TEXT NOT NULL,
+    phase TEXT,
+    state_supervisor TEXT,
+    lga_supervisor TEXT,
+    status TEXT,
+    coverage TEXT,
+    longitude TEXT,
+    latitude TEXT,
+    stage TEXT,
+    completion_status TEXT,
+    gps TEXT,
+    date_created TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    );
+CREATE TABLE reports (
+    id SERIAL PRIMARY KEY,
+    project_id INTEGER REFERENCES projects(id),
+    filename TEXT,
+    file_url TEXT,
+    title TEXT,
+    date_created TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+    CREATE TABLE project_files (
+        id SERIAL PRIMARY KEY,
+        project_id INTEGER REFERENCES projects(id),
+        file_path TEXT NOT NULL,
+        date_uploaded TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    );

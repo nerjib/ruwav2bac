@@ -1,0 +1,38 @@
+{
+  "welcome": {
+    "title": "Welcome to Tranquility kd Lodg",
+    "content": [
+      "Nestled in the heart of Kaduna Millenium City, Tranquility Lodge offers an unforgettable escape from the everyday. Our cozy lodge provides the perfect blend of rustic charm and modern amenities, ensuring a relaxing and rejuvenating stay.\n\nWhether you're seeking adventure on the trails, a peaceful retreat by the fire, or simply a breathtaking view from your window, you'll find it all here. Our dedicated staff is committed to providing exceptional service and creating a memorable experience for each of our guests."
+    ]
+  },
+  "experiences": [
+    {
+      "title": "Free wifi333333333",
+      "description": "Unwind and rejuvenate in our tranquil setting. Enjoy a soothing massage, relax by the fireplace, or simply soak in the peaceful atmosphere.",
+      "isBeingUpdated": true,
+      "image": "http://res.cloudinary.com/dv1hxbpi7/image/upload/v1736182606/lodge/home/undefined_1736182595270.jpg"
+    },
+    {
+      "title": "Free food2222222222",
+      "description": "Savor delectable cuisine prepared with fresh, local ingredients in our on-site restaurant. Our menu features a variety of dishes to satisfy every palate.\n",
+      "isBeingUpdated": true,
+      "image": "http://res.cloudinary.com/dv1hxbpi7/image/upload/v1736182547/lodge/home/undefined_1736182533145.jpg"
+    },
+    {
+      "title": "free wifi",
+      "description": "The carhjh kjjk l",
+      "isBeingUpdated": true,
+      "image": "http://res.cloudinary.com/dv1hxbpi7/image/upload/v1736171684/lodge/home/undefined_1736171678027.jpg"
+    }
+  ],
+  "testimonials": [
+    {
+      "quote": "\"The perfect place to escape and recharge. The views are breathtaking, and the lodge is so cozy and comfortable.\"",
+      "author": "Aliyu Skillz"
+    },
+    {
+      "quote": "\"Absolutely stunning location and incredibly friendly staff. We had a wonderful time and can't wait to return!\"",
+      "author": "Awwal Salis"
+    }
+  ]
+}

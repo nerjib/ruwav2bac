@@ -1,0 +1,56 @@
+[
+  {
+    "name": "trreee",
+    "description": "ffd",
+    "price": 100,
+    "image": "/uploads/1735773286515.jpg",
+    "available": true
+  },
+  {
+    "name": "Qatar",
+    "description": "qatar",
+    "price": 300,
+    "images": [
+      "/uploads/1736155010841.jpg",
+      "/uploads/1736155010874.jpg"
+    ]
+  },
+  {
+    "name": "Paris",
+    "description": "Pas",
+    "price": 200,
+    "images": [
+      "http://res.cloudinary.com/dv1hxbpi7/image/upload/v1736155668/lodge/room/Paris_1736155663758.jpg",
+      "http://res.cloudinary.com/dv1hxbpi7/image/upload/v1736156733/lodge/room/undefined_1736156731292.png"
+    ]
+  },
+  {
+    "name": "Qatar",
+    "description": "qatar",
+    "price": 2000,
+    "images": [
+      "http://res.cloudinary.com/dv1hxbpi7/image/upload/v1736157415/lodge/room/Qatar_1736157411615.jpg",
+      "http://res.cloudinary.com/dv1hxbpi7/image/upload/v1736157420/lodge/room/Qatar_1736157416355.jpg",
+      "http://res.cloudinary.com/dv1hxbpi7/image/upload/v1736157426/lodge/room/Qatar_1736157421677.jpg"
+    ]
+  },
+  {
+    "name": "Berlin",
+    "description": "hjhjh",
+    "price": 2000,
+    "images": [
+      "http://res.cloudinary.com/dv1hxbpi7/image/upload/v1736157799/lodge/room/Berlin_1736157795822.jpg",
+      "http://res.cloudinary.com/dv1hxbpi7/image/upload/v1736157809/lodge/room/Berlin_1736157805138.jpg"
+    ]
+  },
+  {
+    "name": "sama",
+    "description": "kdnf",
+    "price": 200,
+    "images": [
+      null,
+      null,
+      "http://res.cloudinary.com/dv1hxbpi7/image/upload/v1736235975/lodge/room/undefined_1736235935924.jpg"
+    ]
+  }
+]
