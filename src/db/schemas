@@ -33,3 +33,13 @@ CREATE TABLE reports (
         file_path TEXT NOT NULL,
         date_uploaded TIMESTAMP WITH TIME ZONE DEFAULT NOW()
     );
+
+    CREATE TABLE odf (
+        id SERIAL PRIMARY KEY,
+        lga TEXT,
+        no_of_communities INTEGER,
+        no_of_certified INTEGER,
+        date_created TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+        date_updated TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+
+    );

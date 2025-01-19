@@ -201,11 +201,88 @@ router.post('/projects', upload.single('excelFile'), async (req, res) => {
         return res.status(400).send(`${error} jsh`);
       }
   });
+  router.get('/reports', async (req, res) => {
+    const getAllQ = `SELECT * FROM reports left join projects on reports.project_id=projects.id`;
+      try {
+        const { rows } = await db.query(getAllQ);
+        return res.status(201).send(rows);
+      } catch (error) {
+        if (error.routine === '_bt_check_unique') {
+          return res.status(400).send({ message: 'No hero content' });
+        }
+        return res.status(400).send(`${error} jsh`);
+      }
+  });
+  router.get('/locations', async (req, res) => {
+    const getAllQ = `SELECT id, longitude as lng, latitude as lat, title FROM projects`;
+      try {
+        const { rows } = await db.query(getAllQ);
+        return res.status(201).send(rows);
+      } catch (error) {
+        if (error.routine === '_bt_check_unique') {
+          return res.status(400).send({ message: 'No hero content' });
+        }
+        return res.status(400).send(`${error} jsh`);
+      }
+  });
   router.put('/project/gps/:id', async (req, res) => {
     const { longitude, latitude} = req.body;
     const getAllQ = `UPDATE projects SET longitude=$1, latitude=$2 where id=$3 RETURNING *`;
       try {
         const { rows } = await db.query(getAllQ, [longitude,latitude, req.params.id]);
+        return res.status(201).send(rows);
+      } catch (error) {
+        if (error.routine === '_bt_check_unique') {
+          return res.status(400).send({ message: 'No hero content' });
+        }
+        return res.status(400).send(`${error} jsh`);
+      }
+  });
+
+  router.post('/odf', async (req, res) => {
+    try {
+      let { lga, no_of_communities, no_of_certified } = req.body;
+  
+
+        // Create single project from form data
+        const newProject = await db.query(
+          `INSERT INTO odf (lga, no_of_communities, no_of_certified)
+            VALUES ($1, $2, $3) RETURNING *`,
+          [lga, no_of_communities,no_of_certified]
+        );
+  
+        res.status(201).json(newProject.rows[0]);
+      
+  
+    } catch (error) {
+      console.error('Error creating project:', error);
+      res.status(500).json({ error: 'Failed to create project' });
+    }
+  });
+
+  router.put('/odf/:id', async (req, res) => {
+    try {
+      let { lga, no_of_communities, no_of_certified } = req.body;
+  
+
+        // Create single project from form data
+        const newProject = await db.query(
+          `UPDATE odf set no_of_communities=$1, no_of_certified=$2 WHERE id=$3 RETURNING *`,
+          [no_of_communities, no_of_certified, req.params.id]
+        );
+  
+        res.status(201).json(newProject.rows[0]);
+      
+  
+    } catch (error) {
+      console.error('Error creating project:', error);
+      res.status(500).json({ error: 'Failed to create project' });
+    }
+  });
+  router.get('/odf', async (req, res) => {
+    const getAllQ = `SELECT * FROM odf`;
+      try {
+        const { rows } = await db.query(getAllQ);
         return res.status(201).send(rows);
       } catch (error) {
         if (error.routine === '_bt_check_unique') {
