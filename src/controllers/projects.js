@@ -214,7 +214,7 @@ router.post('/projects', upload.single('excelFile'), async (req, res) => {
       }
   });
   router.get('/locations', async (req, res) => {
-    const getAllQ = `SELECT id, longitude as lng, latitude as lat, title FROM projects`;
+    const getAllQ = `SELECT id, longitude AS lng, latitude as lat, title FROM projects where longitude is not null`;
       try {
         const { rows } = await db.query(getAllQ);
         return res.status(201).send(rows);
