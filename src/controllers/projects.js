@@ -10,6 +10,8 @@ const https = require('https');
 const nodemailer = require('nodemailer');
 const xlsx = require('xlsx'); 
 const { count } = require('console');
+const bcrypt = require('bcrypt'); 
+const jwt = require('jsonwebtoken');
 
 
 const transporter = nodemailer.createTransport({
@@ -291,4 +293,84 @@ router.post('/projects', upload.single('excelFile'), async (req, res) => {
         return res.status(400).send(`${error} jsh`);
       }
   });
+  const roles = {
+    admin: ['read', 'write', 'delete'],
+    super_admin: ['read', 'write', 'delete'],
+    manager: ['read', 'write'],
+    user: ['read'],
+  };
+  router.post('/auth/register', async (req, res) => {
+    try {
+      const { full_name, email, password, role, phone_number, lga } = req.body;
+  
+      // Validate role
+      if (!roles.hasOwnProperty(role)) {
+        return res.status(400).json({ error: 'Invalid role' });
+      }
+  
+      // Hash the password
+      const hashedPassword = await bcrypt.hash(password, 10); 
+  
+      // Check if user already exists
+      const existingUser = await db.query('SELECT * FROM users WHERE email = $1', [email]);
+      if (existingUser.rows.length > 0) {
+        return res.status(400).json({ error: 'User already exists' });
+      }
+  
+      // Create new user
+      const newUser = await db.query(
+        'INSERT INTO users (full_name, email, password, role, phone_number, lga) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+        [full_name, email, hashedPassword, role, phone_number, lga]
+      );
+  
+      // Generate JWT
+      const token = jwt.sign({ userId: newUser.rows[0].id, role: newUser.rows[0].role }, process.env.api_secret); 
+  
+      res.status(201).json({ message: 'User created successfully', user: newUser.rows[0], token });
+    } catch (error) {
+      console.error('Error creating user:', error);
+      res.status(500).json({ error: 'Failed to create user' });
+    }
+  });
+
+  router.post('/auth/login', async (req, res) => {
+    try {
+      const { email, password } = req.body;
+  
+      // Find user by email
+      const user = await db.query('SELECT * FROM users WHERE email = $1', [email]);
+  
+      if (user.rows.length === 0) {
+        return res.status(401).json({ error: 'Invalid email or password' });
+      }
+  
+      // Compare passwords
+      const isPasswordValid = await bcrypt.compare(password, user.rows[0].password);
+  
+      if (!isPasswordValid) {
+        return res.status(401).json({ error: 'Invalid email or password' });
+      }
+  
+      // Generate JWT
+      const token = jwt.sign({ userId: user.rows[0].id, role: user.rows[0].role }, process.env.api_secret);
+  
+      res.json({ message: 'Login successful', user: user.rows[0], token });
+    } catch (error) {
+      console.error('Error during login:', error);
+      res.status(500).json({ error: 'Login failed' });
+    }
+  });
+  router.get('/users', async (req, res) => {
+    const getAllQ = `SELECT * FROM users`;
+      try {
+        const { rows } = await db.query(getAllQ);
+        return res.status(201).send(rows);
+      } catch (error) {
+        if (error.routine === '_bt_check_unique') {
+          return res.status(400).send({ message: 'No hero content' });
+        }
+        return res.status(400).send(`${error} jsh`);
+      }
+  });
+  
   module.exports = router;

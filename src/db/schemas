@@ -43,3 +43,14 @@ CREATE TABLE reports (
         date_updated TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 
     );
+
+    CREATE TABLE users (
+        id SERIAL PRIMARY KEY,
+        full_name TEXT NOT NULL,
+        email TEXT UNIQUE NOT NULL,
+        password TEXT NOT NULL,
+        role TEXT NOT NULL,
+        date_created TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+        phone_number TEXT,
+        lga TEXT
+    );
