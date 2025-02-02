@@ -54,3 +54,38 @@ CREATE TABLE reports (
         phone_number TEXT,
         lga TEXT
     );
+
+    CREATE TABLE functionality_reports (
+        id SERIAL PRIMARY KEY,
+        project_id INTEGER REFERENCES projects(id),
+        file_url TEXT,
+        title TEXT,
+        status boolean,
+        recommendation TEXT,
+        longitude double precision,
+        latitude double precision,
+        date_created TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    );
+
+    CREATE TABLE odf_status (
+        id SERIAL PRIMARY KEY,
+        lga TEXT,
+        ward TEXT,
+        community TEXT,
+        status TEXT,
+        date_created TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    );
+
+    CREATE TABLE daily_reports (
+        id SERIAL PRIMARY KEY,
+        project_id INTEGER REFERENCES projects(id),
+        file_url TEXT,
+        title TEXT,
+        date TEXT,
+        longitude double precision,
+        latitude double precision,
+        activity TEXT,
+        outcome TEXT,
+        project_stage TEXT,
+        date_created TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    );

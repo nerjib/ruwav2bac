@@ -240,7 +240,133 @@ router.post('/projects', upload.single('excelFile'), async (req, res) => {
         return res.status(400).send(`${error} jsh`);
       }
   });
+  router.post('/functionality', async (req, res) => {
+    try {
+      let { project_id, status, recommendation, longitude, latitude } = req.body;
+  
 
+        // Create single project from form data
+        const newProject = await db.query(
+          `INSERT INTO functionality_reports (project_id, status, recommendation,longitude, latitude)
+            VALUES ($1, $2, $3,$4,$5) RETURNING *`,
+          [project_id, status,recommendation,longitude,latitude]
+        );
+  
+        res.status(201).json({status: true, data:newProject.rows[0]});      
+  
+    } catch (error) {
+      console.error('Error creating project:', error);
+      res.status(500).json({ error: 'Failed to create reports' });
+    }
+  });
+  router.get('/functionality', async (req, res) => {
+    const getAllQ = `SELECT * FROM functionality_reports`;
+      try {
+        const { rows } = await db.query(getAllQ);
+        return res.status(201).send({status: true, data:rows});
+      } catch (error) {
+        if (error.routine === '_bt_check_unique') {
+          return res.status(400).send({ message: 'No hero content' });
+        }
+        return res.status(400).send(`${error} jsh`);
+      }
+  });
+
+  router.post('/odfstatus', async (req, res) => {
+    try {
+      let { lga, ward, community, status } = req.body;
+  
+
+        // Create single project from form data
+        const newProject = await db.query(
+          `INSERT INTO odf_status (lga, ward, community, status)
+            VALUES ($1, $2, $3,$4) RETURNING *`,
+          [lga, ward,community,status]
+        );
+  
+        res.status(201).json({status: true, data:newProject.rows[0]});      
+  
+    } catch (error) {
+      console.error('Error creating project:', error);
+      res.status(500).json({ error: 'Failed to create reports' });
+    }
+  });
+  router.get('/odfstatus', async (req, res) => {
+    const getAllQ = `SELECT * FROM odf_status`;
+      try {
+        const { rows } = await db.query(getAllQ);
+        return res.status(201).send({status: true, data:rows});
+      } catch (error) {
+        if (error.routine === '_bt_check_unique') {
+          return res.status(400).send({ message: 'No hero content' });
+        }
+        return res.status(400).send(`${error} jsh`);
+      }
+  });
+
+  router.get('/odfstatus/:lga', async (req, res) => {
+    const getAllQ = `SELECT * FROM odf_status where lga=$1`;
+      try {
+        const { rows } = await db.query(getAllQ, [req.params.lga]);
+        return res.status(201).send({status: true, data:rows});
+      } catch (error) {
+        if (error.routine === '_bt_check_unique') {
+          return res.status(400).send({ message: 'No hero content' });
+        }
+        return res.status(400).send(`${error} jsh`);
+      }
+  });
+
+  router.put('/odfstatus/:id', async (req, res) => {
+    try {
+      let { status } = req.body;
+  
+
+        // Create single project from form data
+        const newProject = await db.query(
+          `UPDATE odf_status set status=$1 WHERE id=$2 RETURNING *`,
+          [status, req.params.id]
+        );
+  
+        res.status(201).json({status: true, data:newProject.rows[0]});      
+  
+    } catch (error) {
+      console.error('Error creating project:', error);
+      res.status(500).json({ error: 'Failed to create reports' });
+    }
+  });
+
+  router.post('/dailyreports', async (req, res) => {
+    
+    try{
+      let { project_id, file_url, date, longitude, latitude, activity, outcome, project_stage} = req.body;
+  
+      // Create single project from form data
+      const newProject = await db.query(
+        `INSERT INTO daily_reports (project_id, file_url, date, longitude, latitude, activity,outcome,project_stage)
+          VALUES ($1, $2, $3, $4) RETURNING *`,
+        [project_id, file_url, date, longitude, latitude, activity, outcome, project_stage]
+      );
+  
+      res.status(201).json({status: true, data:newProject.rows[0]});
+    }
+    catch (error) {
+      console.error('Error creating project:', error);
+      res.status(500).json({ error: 'Failed to create project' });
+    }
+  });
+  router.get('/dailyreports', async (req, res) => {
+    const getAllQ = `SELECT * FROM daily_reports`;
+      try {
+        const { rows } = await db.query(getAllQ);
+        return res.status(201).send({status: true, data:rows});
+      } catch (error) {
+        if (error.routine === '_bt_check_unique') {
+          return res.status(400).send({ message: 'No hero content' });
+        }
+        return res.status(400).send(`${error} jsh`);
+      }
+  });
   router.post('/odf', async (req, res) => {
     try {
       let { lga, no_of_communities, no_of_certified } = req.body;
@@ -299,6 +425,8 @@ router.post('/projects', upload.single('excelFile'), async (req, res) => {
     manager: ['read', 'write'],
     user: ['read'],
   };
+
+
   router.post('/auth/register', async (req, res) => {
     try {
       const { full_name, email, password, role, phone_number, lga } = req.body;
