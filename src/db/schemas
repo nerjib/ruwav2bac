@@ -62,6 +62,7 @@ CREATE TABLE reports (
         title TEXT,
         status boolean,
         recommendation TEXT,
+        issue TEXT,
         longitude double precision,
         latitude double precision,
         date_created TIMESTAMP WITH TIME ZONE DEFAULT NOW()

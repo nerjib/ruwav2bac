@@ -242,14 +242,14 @@ router.post('/projects', upload.single('excelFile'), async (req, res) => {
   });
   router.post('/functionality', async (req, res) => {
     try {
-      let { project_id, status, recommendation, longitude, latitude } = req.body;
+      let { project_id, status, recommendation, longitude, latitude, issue } = req.body;
   
 
         // Create single project from form data
         const newProject = await db.query(
-          `INSERT INTO functionality_reports (project_id, status, recommendation,longitude, latitude)
-            VALUES ($1, $2, $3,$4,$5) RETURNING *`,
-          [project_id, status,recommendation,longitude,latitude]
+          `INSERT INTO functionality_reports (project_id, status,issue, recommendation,longitude, latitude)
+            VALUES ($1, $2, $3,$4,$5,$6) RETURNING *`,
+          [project_id, status,issue,recommendation,longitude,latitude]
         );
   
         res.status(201).json({status: true, data:newProject.rows[0]});      
