@@ -242,14 +242,14 @@ router.post('/projects', upload.single('excelFile'), async (req, res) => {
   });
   router.post('/functionality', async (req, res) => {
     try {
-      let { project_id, status, recommendation, longitude, latitude, issue } = req.body;
+      let { project_id, status, recommendation, longitude, latitude, issue, sender } = req.body;
   
 
         // Create single project from form data
         const newProject = await db.query(
-          `INSERT INTO functionality_reports (project_id, status,issue, recommendation,longitude, latitude)
-            VALUES ($1, $2, $3,$4,$5,$6) RETURNING *`,
-          [project_id, status,issue,recommendation,longitude,latitude]
+          `INSERT INTO functionality_reports (project_id, status,issue, recommendation,longitude, latitude, sender)
+            VALUES ($1, $2, $3,$4,$5,$6, $7) RETURNING *`,
+          [project_id, status,issue,recommendation,longitude,latitude, sender]
         );
   
         res.status(201).json({status: true, data:newProject.rows[0]});      
@@ -274,14 +274,14 @@ router.post('/projects', upload.single('excelFile'), async (req, res) => {
 
   router.post('/odfstatus', async (req, res) => {
     try {
-      let { lga, ward, community, status } = req.body;
+      let { lga, ward, community, status, sender } = req.body;
   
 
         // Create single project from form data
         const newProject = await db.query(
-          `INSERT INTO odf_status (lga, ward, community, status)
-            VALUES ($1, $2, $3,$4) RETURNING *`,
-          [lga, ward,community,status]
+          `INSERT INTO odf_status (lga, ward, community, status, sender)
+            VALUES ($1, $2, $3,$4,$5) RETURNING *`,
+          [lga, ward,community,status, sender]
         );
   
         res.status(201).json({status: true, data:newProject.rows[0]});      
@@ -339,13 +339,13 @@ router.post('/projects', upload.single('excelFile'), async (req, res) => {
   router.post('/dailyreports', async (req, res) => {
     
     try{
-      let { project_id, file_url, date, longitude, latitude, activity, outcome, project_stage} = req.body;
+      let { project_id, file_url, date, longitude, latitude, activity, outcome, project_stage, lgaSupId, stateSupId} = req.body;
   
       // Create single project from form data
       const newProject = await db.query(
-        `INSERT INTO daily_reports (project_id, file_url, date, longitude, latitude, activity,outcome,project_stage)
-          VALUES ($1, $2, $3, $4) RETURNING *`,
-        [project_id, file_url, date, longitude, latitude, activity, outcome, project_stage]
+        `INSERT INTO daily_reports (project_id, file_url, date, longitude, latitude, activity,outcome,project_stage, lga_sup_id, state_sup_id)
+          VALUES ($1, $2, $3, $4, $5, $6,$7, $8, $9, $10) RETURNING *`,
+        [project_id, file_url, date, longitude, latitude, activity, outcome, project_stage, lgaSupId, stateSupId]
       );
   
       res.status(201).json({status: true, data:newProject.rows[0]});
