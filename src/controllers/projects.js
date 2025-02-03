@@ -260,7 +260,7 @@ router.post('/projects', upload.single('excelFile'), async (req, res) => {
     }
   });
   router.get('/functionality', async (req, res) => {
-    const getAllQ = `SELECT * FROM functionality_reports`;
+    const getAllQ = `SELECT * FROM functionality_reports LEFT JOIN projects on functionality_reports.project_id=projects.id`;
       try {
         const { rows } = await db.query(getAllQ);
         return res.status(201).send({status: true, data:rows});
